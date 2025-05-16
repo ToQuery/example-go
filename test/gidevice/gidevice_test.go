@@ -37,6 +37,21 @@ type DeviceDetail struct {
 	BuildVersion              string `json:"BuildVersion,omitempty"`
 }
 
+func TestAcf(t *testing.T) {
+	usbmux, err := giDevice.NewUsbmux()
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	devices, err := usbmux.Devices()
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, dev := range devices {
+		log.Println(dev.Properties().SerialNumber, dev.Properties().ProductID, dev.Properties().DeviceID)
+	}
+}
+
 func TestDevices(t *testing.T) {
 	usbmux, err := giDevice.NewUsbmux()
 	if err != nil {
