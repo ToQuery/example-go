@@ -34,12 +34,15 @@ func TestExecBinary(t *testing.T) {
 		envKey := envKV[0]
 		envVal := envKV[1]
 		if envKey == "PATH" {
-			os.Setenv("PATH", envVal+":/Users/toquery/Projects/Example/example-go/resource/binary/example_1.1.0/darwin_arm64")
+			err := os.Setenv("PATH", envVal+":/Users/toquery/Projects/Example/example-go/assets/binary/example_0.0.1/darwin-arm64")
+			if err != nil {
+				return
+			}
 		}
 	}
 
 	args := []string{"-version"}
-	cmd := exec.CommandContext(t.Context(), "example", args...)
+	cmd := exec.CommandContext(t.Context(), "example-go", args...)
 
 	buf := bytes.NewBuffer(nil)
 	stdErrBuf := bytes.NewBuffer(nil)
