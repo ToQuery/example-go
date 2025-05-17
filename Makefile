@@ -1,5 +1,6 @@
 # 从环境变量获取版本号
 VERSION ?= 0.0.1
+BUILD_ID ?= 0x0001
 BUILD_TIME := $(shell date +%FT%T)
 OUTPUT_DIR := dist
 BIN_NAME := example-go
@@ -7,7 +8,7 @@ BIN_NAME := example-go
 
 .PHONY: build
 build:
-	go build -ldflags "-s -w -X main.Version=$(VERSION) -X main.BuildTime=$(BUILD_TIME)" -o $(OUTPUT_DIR)/$(BIN_NAME) main.go
+	go build -ldflags "-s -w -X main.Version=$(VERSION) -X main.BuildId=$(BUILD_ID) -X main.BuildTime=$(BUILD_TIME)" -o $(OUTPUT_DIR)/$(BIN_NAME) main.go
 
 
 .PHONY: build-all
