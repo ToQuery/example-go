@@ -20,3 +20,13 @@ func TestFfmpegVersion(t *testing.T) {
 	}
 	log.Printf("FFmpeg版本信息:\n%s", buf.String())
 }
+
+func TestFfmpegProbe(t *testing.T) {
+	videoPath := ""
+	// Get video properties using ffprobe
+	probe, err := ffmpeg_go.Probe(videoPath)
+	if err != nil {
+		log.Fatalf("failed to probe video: %v", err)
+	}
+	log.Println(probe)
+}

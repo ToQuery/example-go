@@ -5,7 +5,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"path/filepath"
 	"strings"
 	"testing"
 )
@@ -20,14 +19,14 @@ func TestHttpDiskFile(t *testing.T) {
 
 	// 启动HTTP服务器
 	fmt.Printf("服务器已启动，监听端口: %s\n", port)
-	fmt.Printf("访问文件示例: http://localhost:%s/disk_file/index.txt\n", port)
+	fmt.Printf("访问文件示例: http://localhost:%s/disk_file/\n", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
 
 // 处理磁盘文件请求的函数
 func handleDiskFile(w http.ResponseWriter, r *http.Request) {
 	// 从URL中提取文件路径
-	filePath := strings.TrimPrefix(r.URL.Path, "/disk_file/")
+	filePath := strings.TrimPrefix(r.URL.Path, "/disk_file")
 
 	// 安全检查：防止访问上级目录
 	if strings.Contains(filePath, "../") || strings.Contains(filePath, "..\\") {
@@ -35,18 +34,8 @@ func handleDiskFile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// 获取当前工作目录作为基础路径
-	baseDir, err := os.Getwd()
-	if err != nil {
-		http.Error(w, "无法获取工作目录", http.StatusInternalServerError)
-		return
-	}
-
-	// 构建完整的文件路径
-	fullPath := filepath.Join(baseDir, filePath)
-
 	// 检查文件是否存在
-	fileInfo, err := os.Stat(fullPath)
+	fileInfo, err := os.Stat(filePath)
 	if err != nil {
 		if os.IsNotExist(err) {
 			http.Error(w, "文件不存在", http.StatusNotFound)
@@ -63,5 +52,5 @@ func handleDiskFile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// 提供文件下载
-	http.ServeFile(w, r, fullPath)
+	http.ServeFile(w, r, filePath)
 }
