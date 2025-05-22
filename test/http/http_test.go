@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"runtime"
 	"strings"
 	"testing"
 )
@@ -26,19 +27,12 @@ func TestHttpDiskFile(t *testing.T) {
 // 处理磁盘文件请求的函数
 func handleDiskFile(w http.ResponseWriter, r *http.Request) {
 	// 从URL中提取文件路径
-	filePath := strings.TrimPrefix(r.URL.Path, "/disk_file")
-
-	// 处理Windows路径格式（如C:/path/to/file）
-	if len(filePath) > 0 && filePath[0] == '/' && len(filePath) > 3 && filePath[2] == ':' {
-		// 移除开头的斜杠，保留驱动器部分（如C:/path/to/file）
-		filePath = filePath[1:]
+	prefix := "/disk_file"
+	if runtime.GOOS == "windows" {
+		prefix += "/"
 	}
 
-	// 安全检查：防止访问上级目录
-	if strings.Contains(filePath, "../") || strings.Contains(filePath, "..\\") {
-		http.Error(w, "禁止访问上级目录", http.StatusForbidden)
-		return
-	}
+	filePath := strings.TrimPrefix(r.URL.Path, prefix)
 
 	// 检查文件是否存在
 	fileInfo, err := os.Stat(filePath)
