@@ -1,10 +1,10 @@
-package gidevice
+package gidevice_test
 
 import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	giDevice "github.com/electricbubble/gidevice"
+	"github.com/electricbubble/gidevice"
 	"image"
 	"image/jpeg"
 	"image/png"
@@ -43,12 +43,9 @@ func TestAcf(t *testing.T) {
 		log.Fatalln(err)
 	}
 
-	devices, err := usbmux.Devices()
+	_, err = usbmux.Devices()
 	if err != nil {
 		log.Fatal(err)
-	}
-	for _, dev := range devices {
-		log.Println(dev.Properties().SerialNumber, dev.Properties().ProductID, dev.Properties().DeviceID)
 	}
 }
 

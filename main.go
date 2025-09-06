@@ -15,5 +15,5 @@ func main() {
 	osType := runtime.GOOS
 	osArch := runtime.GOARCH
 
-	fmt.Printf("example-wails version %s (BuildId: %s) %s_%s built at %s\n", Version, BuildId, osType, osArch, BuildTime)
+	fmt.Printf("example-go version %s (BuildId: %s) %s_%s built at %s\n", Version, BuildId, osType, osArch, BuildTime)
 }
